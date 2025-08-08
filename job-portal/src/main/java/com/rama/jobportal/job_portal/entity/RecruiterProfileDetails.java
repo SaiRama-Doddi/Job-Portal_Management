@@ -15,11 +15,13 @@ import java.util.UUID;
 public class RecruiterProfileDetails {
 
     @Id
+    @GeneratedValue
     private UUID recruiterId;
 
     @OneToOne
-    @MapsId
-    @JoinColumn(name="recruiter_id")
+   // @MapsId
+   // @JoinColumn(name="recruiter_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "userId")
     private User user;
 
     private String companyName;
@@ -30,5 +32,9 @@ public class RecruiterProfileDetails {
     @Lob
     @Column(nullable = true)
     private byte[] companyLogo;
+
+    private String companyDescription;
+    private String role;
+    private int experienceNeeded;
 
 }

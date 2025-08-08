@@ -46,12 +46,6 @@ public class UserController {
     }
 
 
-    @GetMapping("/hi")
-    public String sayHello(){
-        return "hi.............rama";
-    }
-
-
     @PostMapping(value = "register/recruiter",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public  ResponseEntity<?> registerRecruiter(@RequestPart("user") userDTO userDto,
                                                 @RequestPart("recruiter") recruiterDTO recruiterDto,
@@ -74,5 +68,10 @@ public class UserController {
             return ResponseEntity.status(500).body("Verification failed: " + e.getMessage());
         }
     }
+    @GetMapping("/hi")
+    public String sayHello(){
+        return "hi.............rama";
+    }
+
 
 }

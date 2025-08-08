@@ -34,12 +34,13 @@ public class User {
     @Column(name = "verified")
     private boolean verified= false;
 
+    @Column(name = "local_date_time")
     private LocalDateTime localDateTime;
 
-    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
-    private  JobSeekerDetails jobSeekerDetails;
+    //@OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
+   // private  JobSeekerDetails jobSeekerDetails;
 
-    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
-    private  RecruiterProfileDetails recruiterProfileDetails;
+    //@OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
+    //private  RecruiterProfileDetails recruiterProfileDetails;
 
 }

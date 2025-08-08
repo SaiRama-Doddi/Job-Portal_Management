@@ -35,6 +35,7 @@ public class userService {
     private final JavaMailSender javaMailSender;
 
 
+
     public void registerJobSeeker(userDTO userDto, jobSeekerDTO jobSeekerDto, MultipartFile resume) throws IOException {
         Optional<User> optionalUser = userRepo.findByEmail(userDto.getEmail());
         if (optionalUser.isEmpty()) {
@@ -47,9 +48,13 @@ public class userService {
             throw new IllegalArgumentException("Email not verified. Please verify OTP before registering.");
         }
 
+        if(optionalUser.isPresent()){
+            throw new IllegalArgumentException("Email already exists.");
+        }
+
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setRole(Role.JOB_SEEKER);
-        user.setOtp(null);
+        user.setOtp(userDto.getOtp());
         // Set password only now
 
         String skill = String.join(",", jobSeekerDto.getSkills());
@@ -63,9 +68,11 @@ public class userService {
                 .resume(resume.getBytes())
                 .build();
 
-        user.setJobSeekerDetails(profile);
+       // user.setJobSeekerDetails(profile);
+        profile.setUser(user);
 
         userRepo.save(user);
+        jobseekerRepo.save(profile);
     }
 
 
@@ -79,6 +86,8 @@ public class userService {
             exisitingUser.setOtp(otp);
             exisitingUser.setVerified(false);
             exisitingUser.setLocalDateTime(LocalDateTime.now());
+            System.out.println("Saving user with OTP: " + otp + " at " + LocalDateTime.now());
+
             userRepo.save(exisitingUser);
         }
         else{
@@ -118,8 +127,10 @@ public class userService {
                 .build();
 
 
-        user.setRecruiterProfileDetails(recruiter);
+       // user.setRecruiterProfileDetails(recruiter);
+        recruiter.setUser(user);
         userRepo.save(user);
+        recruiterprofileRepo.save(recruiter);
 
 
     }
@@ -131,6 +142,8 @@ public class userService {
         message.setSubject("OTP for Email Verification");
         message.setText("Your Otp :"+otp+" \n Valid for 5 Minutes");
         javaMailSender.send(message);
+
+
 
     }
 

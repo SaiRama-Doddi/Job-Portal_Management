@@ -16,14 +16,17 @@ import java.util.UUID;
 public class JobSeekerDetails {
 
     @Id
+    @GeneratedValue
     private UUID seekerId;
 
     @OneToOne
-    @MapsId
-    @JoinColumn(name="seeker_id")
+   // @MapsId
+    //@JoinColumn(name="seeker_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "userId")
     private  User user;
 
     @Lob
+
     @Column(nullable = true)
     private byte[] resume;
 
