@@ -11,6 +11,7 @@ import com.rama.jobportal.job_portal.entity.User;
 import com.rama.jobportal.job_portal.repository.jobSeekerRepo;
 import com.rama.jobportal.job_portal.repository.recruiterProfileRepo;
 import com.rama.jobportal.job_portal.repository.userRepository;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -48,14 +49,16 @@ public class userService {
             throw new IllegalArgumentException("Email not verified. Please verify OTP before registering.");
         }
 
-        if(optionalUser.isPresent()){
-            throw new IllegalArgumentException("Email already exists.");
+        if (jobseekerRepo.findByUser(user).isPresent()) {
+            throw new IllegalArgumentException("User profile already exists for this email.");
         }
+
 
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setRole(Role.JOB_SEEKER);
-        user.setOtp(userDto.getOtp());
+       // user.setOtp(userDto.getOtp());
         // Set password only now
+        user.setLocalDateTime(LocalDateTime.now());
 
         String skill = String.join(",", jobSeekerDto.getSkills());
 
@@ -107,23 +110,36 @@ public class userService {
     }
 
 
-    public void registerRecruiter(userDTO userDto, recruiterDTO recruiterDto,MultipartFile logoFile) throws  IOException{
+    public void registerRecruiter(userDTO userDto, recruiterDTO recruiterDto,MultipartFile companyLogo) throws  IOException{
 
-        if(userRepo.findByEmail(userDto.getEmail()).isPresent()){
-            throw new IllegalArgumentException("Email already Exsists");
+        Optional<User> optionalUser = userRepo.findByEmail(userDto.getEmail());
+        if (optionalUser.isEmpty()) {
+            throw new IllegalArgumentException("Please verify your email before registering.");
         }
 
-        User user=User.builder()
-                .email(userDto.getEmail())
-                .password(passwordEncoder.encode(userDto.getPassword()))
-                .role(Role.RECRUITER)
-                .build();
+        User user = optionalUser.get();
+
+        if (!user.isVerified()) {
+            throw new IllegalArgumentException("Email not verified. Please verify OTP before registering.");
+        }
+
+        // Check if recruiter profile already exists for this user
+        if (recruiterprofileRepo.findByUser(user).isPresent()) {
+            throw new IllegalArgumentException("Recruiter profile already exists for this email.");
+        }
+
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setRole(Role.RECRUITER);
+       // user.setOtp(userDto.getOtp());
+        user.setLocalDateTime(LocalDateTime.now());
 
         RecruiterProfileDetails recruiter=RecruiterProfileDetails.builder()
                 .user(user)
                 .companyName(recruiterDto.getCompanyName())
                 .companyWebsite(recruiterDto.getCompanyWebsite())
-                .companyLogo(logoFile.getBytes())
+                .companyLogo(companyLogo.getBytes())
+                .companyDescription(recruiterDto.getCompanyDescription())
+                .experienceNeeded(recruiterDto.getExperienceNeeded())
                 .build();
 
 

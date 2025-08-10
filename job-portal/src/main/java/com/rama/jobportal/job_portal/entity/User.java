@@ -27,6 +27,7 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
+   // @ElementCollection(fetch = FetchType.EAGER)
     private Role role;
 
     private  String otp;

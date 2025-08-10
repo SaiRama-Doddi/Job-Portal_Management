@@ -13,7 +13,7 @@ public class recruiterDTO {
 
     private String companyName;
     private String companyWebsite;
-    private MultipartFile companyLogo;
+   // private MultipartFile companyLogo;
    private String companyDescription;
     private String role;
     private int experienceNeeded;

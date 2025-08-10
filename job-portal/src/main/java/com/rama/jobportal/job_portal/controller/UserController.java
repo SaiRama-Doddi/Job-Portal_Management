@@ -46,7 +46,7 @@ public class UserController {
     }
 
 
-    @PostMapping(value = "register/recruiter",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/register/recruiter",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public  ResponseEntity<?> registerRecruiter(@RequestPart("user") userDTO userDto,
                                                 @RequestPart("recruiter") recruiterDTO recruiterDto,
                                                 @RequestPart("companyLogo") MultipartFile companyLogo)throws IOException{
