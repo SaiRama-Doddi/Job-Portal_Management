@@ -183,4 +183,54 @@ public class userService {
 
     }
 
+
+
+    public String passwordResetOtp(String email){
+        Optional<User> optionalUser=userRepo.findByEmail(email);
+        if(optionalUser.isEmpty()){
+            throw new IllegalArgumentException("user with the email deosnt exists");
+        }
+        User user=optionalUser.get();
+
+        String otp=String.valueOf(new Random().nextInt(900000)+100000);
+        user.setOtp(otp);
+        user.setVerified(false);
+        user.setLocalDateTime(LocalDateTime.now());
+        userRepo.save(user);
+        sendEmail(email,otp);
+        return "Otp sent for password reset.";
+    }
+
+    public String verifyPasswordResetOption(verifyOtpRequestDTO dto){
+        Optional<User> optionalUser=userRepo.findByEmail(dto.getEmail());
+        if(optionalUser.isEmpty()) return "User not found";
+        User user=optionalUser.get();
+
+        if (user.getOtp() != null && user.getOtp().equals(dto.getOtp())) {
+            user.setVerified(true);  // Mark as verified for password reset
+            user.setOtp(null);       // Clear OTP after successful verification
+            userRepo.save(user);
+            return "OTP verified successfully. You can now reset your password.";
+        } else {
+            return "Invalid OTP!";
+        }
+
+    }
+
+    // Reset password once OTP is verified
+    public String resetPassword(String email,String newPassword){
+        Optional<User> optionalUser=userRepo.findByEmail(email);
+        if(optionalUser.isEmpty()) return "User not found";
+        User user=optionalUser.get();
+        if (!user.isVerified()) {
+            return "OTP not verified. Please verify OTP before resetting password.";
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setVerified(false);  // Reset the verified flag after password reset (optional)
+        userRepo.save(user);
+
+        return "Password reset successfully.";
+    }
+
+
 }
