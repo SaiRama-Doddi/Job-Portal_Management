@@ -4,6 +4,7 @@ import com.rama.jobportal.job_portal.dto.verifyOtpRequestDTO;
 import com.rama.jobportal.job_portal.entity.Role;
 import com.rama.jobportal.job_portal.security.JwtUtil;
 import com.rama.jobportal.job_portal.service.userService;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -57,7 +58,7 @@ public class AuthController {
     }
 
     @PostMapping("/password-reset/request")
-    public ResponseEntity<String> requestPasswordReset(@RequestParam String email) {
+    public ResponseEntity<String> requestPasswordReset(@RequestParam String email) throws MessagingException {
         String response = UserService.passwordResetOtp(email);
         return ResponseEntity.ok(response);
     }

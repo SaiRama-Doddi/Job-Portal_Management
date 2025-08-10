@@ -11,10 +11,13 @@ import com.rama.jobportal.job_portal.entity.User;
 import com.rama.jobportal.job_portal.repository.jobSeekerRepo;
 import com.rama.jobportal.job_portal.repository.recruiterProfileRepo;
 import com.rama.jobportal.job_portal.repository.userRepository;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -80,7 +83,7 @@ public class userService {
 
 
 
-    public String sendOtpToEmail(String email) {
+    public String sendOtpToEmail(String email) throws MessagingException {
         Optional<User> optionalUser = userRepo.findByEmail(email);
         String otp = String.valueOf(new Random().nextInt(900000) + 100000);
         if (optionalUser.isPresent()) {
@@ -152,15 +155,32 @@ public class userService {
     }
 
 
-    private void sendEmail(String to,String otp){
-        SimpleMailMessage message=new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject("OTP for Email Verification");
-        message.setText("Your Otp :"+otp+" \n Valid for 5 Minutes");
+
+    private void sendEmail(String to, String otp) throws MessagingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+
+        // true = multipart message
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        helper.setTo(to);
+        helper.setSubject("OTP for Email Verification");
+
+        // Set From (optional, defaults to configured email)
+        helper.setFrom("your-email@example.com");
+
+        // Create an HTML body
+        String htmlMsg = "<h3>OTP for Email Verification</h3>"
+                + "<p>Your OTP is: <b>" + otp + "</b></p>"
+                + "<p>This OTP is valid for <b>5 minutes</b>.</p>"
+                + "<br><p>Regards,<br>Job Portal Team</p>";
+
+        helper.setText(htmlMsg, true); // true = isHtml
+
+        // Add custom headers if needed
+        message.addHeader("X-Mailer", "JavaMail");
+        message.addHeader("X-Priority", "1");  // High priority
+
         javaMailSender.send(message);
-
-
-
     }
 
 
@@ -185,7 +205,7 @@ public class userService {
 
 
 
-    public String passwordResetOtp(String email){
+    public String passwordResetOtp(String email) throws MessagingException {
         Optional<User> optionalUser=userRepo.findByEmail(email);
         if(optionalUser.isEmpty()){
             throw new IllegalArgumentException("user with the email deosnt exists");
