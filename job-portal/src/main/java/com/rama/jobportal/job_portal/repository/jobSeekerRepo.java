@@ -10,4 +10,5 @@ import java.util.UUID;
 @Repository
 public interface jobSeekerRepo extends JpaRepository<JobSeekerDetails, UUID> {
     Optional<JobSeekerDetails> findByUser(User user);
+    Optional<JobSeekerDetails> findByUser_UserId(UUID userId);
 }

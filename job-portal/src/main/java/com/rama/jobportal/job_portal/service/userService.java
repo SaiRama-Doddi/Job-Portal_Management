@@ -13,6 +13,7 @@ import com.rama.jobportal.job_portal.repository.recruiterProfileRepo;
 import com.rama.jobportal.job_portal.repository.userRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -81,6 +83,28 @@ public class userService {
         jobseekerRepo.save(profile);
     }
 
+
+    @Transactional
+    public  void updateJobSeeker(UUID userId, jobSeekerDTO jobSeekerDto, MultipartFile resume) throws IOException {
+        Optional<JobSeekerDetails> jb=jobseekerRepo.findByUser_UserId(userId);
+        if(jb.isEmpty()) throw new IllegalArgumentException("Job seeker profile not found");
+
+        JobSeekerDetails jobSeekerDetails=jb.get();
+
+        jobSeekerDetails.setCurrentLocation(jobSeekerDto.getCurrentLocation());
+        jobSeekerDetails.setPreferredLocation(jobSeekerDto.getPreferredLocation());
+        jobSeekerDetails.setExperienceYears(jobSeekerDto.getExperienceYears());
+
+        if(jobSeekerDto.getSkills()!=null){
+            String skillsString=String.join(",",jobSeekerDto.getSkills());
+            jobSeekerDetails.setSkills(skillsString);
+        }
+
+        if(resume!=null && !resume.isEmpty()){
+            jobSeekerDetails.setResume(resume.getBytes());
+        }
+        jobseekerRepo.save(jobSeekerDetails);
+    }
 
 
     public String sendOtpToEmail(String email) throws MessagingException {
@@ -143,6 +167,7 @@ public class userService {
                 .companyLogo(companyLogo.getBytes())
                 .companyDescription(recruiterDto.getCompanyDescription())
                 .experienceNeeded(recruiterDto.getExperienceNeeded())
+                .role(recruiterDto.getRole())
                 .build();
 
 
@@ -154,6 +179,29 @@ public class userService {
 
     }
 
+
+    @Transactional
+    public void updateRecruiter(UUID userId,recruiterDTO recruiterDto,MultipartFile companyLogo) throws  IOException{
+        //find user by userdy from recruiter
+        Optional<RecruiterProfileDetails> rp=recruiterprofileRepo.findByUser_UserId(userId);
+
+        if(rp.isEmpty()) throw new IllegalArgumentException("Recruiter profile not found");
+
+        RecruiterProfileDetails recruiterProfileDetails=rp.get();
+
+        recruiterProfileDetails.setCompanyDescription(recruiterDto.getCompanyDescription());
+        recruiterProfileDetails.setCompanyName(recruiterDto.getCompanyName());
+        recruiterProfileDetails.setCompanyWebsite(recruiterDto.getCompanyWebsite());
+        recruiterProfileDetails.setExperienceNeeded(recruiterDto.getExperienceNeeded());
+        recruiterProfileDetails.setRole(recruiterDto.getRole());
+
+        if(companyLogo!=null && !companyLogo.isEmpty()){
+            recruiterProfileDetails.setCompanyLogo(companyLogo.getBytes());
+        }
+
+        recruiterprofileRepo.save(recruiterProfileDetails);
+
+    }
 
 
     private void sendEmail(String to, String otp) throws MessagingException {

@@ -33,6 +33,9 @@ public class RecruiterProfileDetails {
     @Column(nullable = true)
     private byte[] companyLogo;
 
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String companyDescription;
     private String role;
     private int experienceNeeded;
