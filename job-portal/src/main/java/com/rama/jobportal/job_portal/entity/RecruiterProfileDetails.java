@@ -4,6 +4,8 @@ package com.rama.jobportal.job_portal.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -39,5 +41,10 @@ public class RecruiterProfileDetails {
     private String companyDescription;
     private String role;
     private int experienceNeeded;
+
+
+
+    @OneToMany(mappedBy = "recruiterProfileDetails", cascade = CascadeType.ALL, orphanRemoval = true)
+    public List<Job> jobs=new ArrayList<>();
 
 }

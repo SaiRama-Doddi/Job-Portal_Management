@@ -1,7 +1,9 @@
 package com.rama.jobportal.job_portal.controller;
 
 
+import com.rama.jobportal.job_portal.dto.jobDTO;
 import com.rama.jobportal.job_portal.dto.recruiterDTO;
+import com.rama.jobportal.job_portal.service.jobService;
 import com.rama.jobportal.job_portal.service.userService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -17,6 +19,7 @@ import java.util.UUID;
 public class RecruiterController {
 
     private  final userService UserService;
+    private  final jobService  JobService;
 
     @GetMapping("/profile")
     public String getProfile() {
@@ -39,6 +42,23 @@ public class RecruiterController {
             throw new RuntimeException(e);
         }
 
-
     }
+
+
+    @PostMapping(value="/create-job/{recruiterId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> createJob(
+            @PathVariable UUID recruiterId,
+            @RequestPart("job") jobDTO jobDto,
+            @RequestPart(value="companyLogo",required=false) MultipartFile companyLogo){
+        try
+        {
+          JobService.createJob(recruiterId,jobDto,companyLogo);
+          return ResponseEntity.ok("Job has been Created");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
 }
