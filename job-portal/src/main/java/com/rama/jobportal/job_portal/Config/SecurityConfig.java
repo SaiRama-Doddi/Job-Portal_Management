@@ -34,6 +34,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll() // public endpoints
                         .requestMatchers("/api/recruiter/**").hasAuthority("RECRUITER") // recruiter-only endpoints
                         .requestMatchers("/api/jobseeker/**").hasAuthority("JOB_SEEKER")
+                        .requestMatchers("/api/applications/**").hasAuthority("JOB_SEEKER")
                         .anyRequest().authenticated() // everything else needs authentication
                 )
                 .cors(Customizer.withDefaults())

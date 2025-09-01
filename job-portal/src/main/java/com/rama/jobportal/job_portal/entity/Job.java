@@ -1,11 +1,9 @@
 package com.rama.jobportal.job_portal.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -15,6 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString(exclude = {"companyLogo", "jobDescription"})
 public class Job {
 
 
@@ -45,6 +44,7 @@ public class Job {
 
     @Lob
     @Column(nullable = true)
+    @Basic(fetch = FetchType.EAGER)
     private byte[] companyLogo;
 
     @ManyToOne

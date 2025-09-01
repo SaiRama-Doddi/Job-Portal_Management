@@ -69,11 +69,13 @@ public class userService {
 
         JobSeekerDetails profile = JobSeekerDetails.builder()
                 .user(user)
-                .experienceYears(jobSeekerDto.getExperienceYears())
+                .experience(jobSeekerDto.getExperience())
                 .currentLocation(jobSeekerDto.getCurrentLocation())
                 .preferredLocation(jobSeekerDto.getPreferredLocation())
                 .skills(skill)
                 .resume(resume.getBytes())
+                .name(jobSeekerDto.getName())
+                .gender(jobSeekerDto.getGender())
                 .build();
 
        // user.setJobSeekerDetails(profile);
@@ -93,7 +95,7 @@ public class userService {
 
         jobSeekerDetails.setCurrentLocation(jobSeekerDto.getCurrentLocation());
         jobSeekerDetails.setPreferredLocation(jobSeekerDto.getPreferredLocation());
-        jobSeekerDetails.setExperienceYears(jobSeekerDto.getExperienceYears());
+        jobSeekerDetails.setExperience(jobSeekerDto.getExperience());
 
         if(jobSeekerDto.getSkills()!=null){
             String skillsString=String.join(",",jobSeekerDto.getSkills());

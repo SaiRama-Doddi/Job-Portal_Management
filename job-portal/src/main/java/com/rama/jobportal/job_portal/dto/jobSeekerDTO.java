@@ -12,8 +12,12 @@ import java.util.List;
 @AllArgsConstructor
 public class jobSeekerDTO {
 
-    private double experienceYears;
+  //  private double experienceYears;
+  private String experience; // e.g., "Fresher", "0-1 years", "2 years"
     private String currentLocation;
     private String preferredLocation;
     private List<String> skills;
+
+    private String name;
+    private String gender;
 }

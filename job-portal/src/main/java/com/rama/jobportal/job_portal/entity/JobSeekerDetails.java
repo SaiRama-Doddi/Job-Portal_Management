@@ -1,6 +1,7 @@
 package com.rama.jobportal.job_portal.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,12 +26,20 @@ public class JobSeekerDetails {
     @JoinColumn(name = "user_id", referencedColumnName = "userId")
     private  User user;
 
-    @Lob
+    private String name;
+    private String gender;
 
+    @Lob
     @Column(nullable = true)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private byte[] resume;
 
-    private double experienceYears;
+// Before:
+// private double experienceYears;
+
+    // After:
+    private String experience; // store values like "Fresher", "0-1 years", "2 years"
+
 
     private String currentLocation;
 
