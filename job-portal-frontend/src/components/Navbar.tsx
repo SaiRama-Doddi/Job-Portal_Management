@@ -11,38 +11,43 @@ const Navbar: React.FC = () => {
         <div className="hidden md:flex items-center justify-between h-16">
           {/* Left: Logo + Title */}
           <div className="flex items-center space-x-2">
-            <Briefcase className="h-8 w-8 text-blue-600" />
-            <span className="font-bold text-lg text-gray-800">CareerConnect</span>
+            <Briefcase className="h-8 w-8 text-[#2596be]" />
+            <span className="font-bold text-lg bg-gradient-to-r from-[#2596be] to-[#063970] bg-clip-text text-transparent">
+  CareerConnect
+</span>
+
           </div>
 
           {/* Center: Nav Links + Search + Login */}
-         {/* Center: Nav Links + Search + Login */}
-<div className="flex items-center space-x-8">
-  <a href="#" className="text-gray-700 hover:text-blue-600">
-    Jobs
-  </a>
-  <a href="#" className="text-gray-700 hover:text-blue-600">
-    Companies
-  </a>
+      
+          <div className="flex items-center space-x-8">
+         <a href="#" className="text-gray-700 hover:text-[#063970]">
+  Jobs
+</a>
+<a href="#" className="text-gray-700 hover:text-[#063970]">
+  Companies
+</a>
 
-  <input
-    type="text"
-    placeholder="Search..."
-    className="px-3 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-  />
 
-  <button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-700 hover:to-indigo-700 hover:scale-105 transition-transform duration-200">
-    Login
-  </button>
-</div>
+            <input
+              type="text"
+              placeholder="Search..."
+              className="px-3 py-1  rounded-md focus:outline-none focus:ring-1 focus:ring-[#76b5c5]"
+            />
 
+            <button className="bg-[#2596be] text-white px-5 py-2 rounded-full shadow-md hover:from-blue-700 hover:to-indigo-700 hover:scale-105 transition-transform duration-200">
+              Login
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navbar */}
         <div className="flex md:hidden items-center justify-between h-16">
           <div className="flex items-center space-x-2">
             <Briefcase className="h-8 w-8 text-blue-600" />
-            <span className="font-bold text-lg text-gray-800">CareerConnect</span>
+            <span className="font-bold text-lg text-gray-800">
+              CareerConnect
+            </span>
           </div>
 
           <button
@@ -68,10 +73,9 @@ const Navbar: React.FC = () => {
               placeholder="Search..."
               className="px-3 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 w-3/4"
             />
-           <button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-700 hover:to-indigo-700 hover:scale-105 transition-transform duration-200">
-  Login
-</button>
-
+            <button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-700 hover:to-indigo-700 hover:scale-105 transition-transform duration-200">
+              Login
+            </button>
           </div>
         )}
       </div>
