@@ -37,7 +37,7 @@ export default function Home() {
             We’re working on something exciting! Stay tuned for the launch of
             Career Connect, your gateway to opportunities.
           </p>
-          <button className="px-6 py-3 bg-blue-600 text-white rounded-xl shadow-md hover:bg-blue-700 transition-all">
+          <button className="px-6 py-3 bg-[#2596be] text-white rounded-xl shadow-md hover:bg-blue-700 transition-all">
             Learn More
           </button>
         </motion.div>

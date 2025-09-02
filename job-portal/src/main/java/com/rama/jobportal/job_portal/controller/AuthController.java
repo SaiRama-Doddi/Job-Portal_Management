@@ -46,7 +46,7 @@ public class AuthController {
             response.put("token", token);
             return response;
 
-        }
+        }   
         catch (AuthenticationException e){
             throw new RuntimeException("Invalid credentials");
         }
